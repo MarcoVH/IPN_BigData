@@ -1,0 +1,351 @@
+---
+output:
+  pdf_document:
+    fig_caption: yes
+    keep_tex: yes
+header-includes: \usepackage{float}
+---
+
+\begin{centering}
+
+\vspace*{5 cm}
+
+\Huge
+
+{\bf Administración e Instalación de Linux CentOS (Windows 10)}
+
+\vspace{3 cm}
+
+\Large
+Marco Andrés Vázquez Hernández
+
+\vspace{1 cm}
+\normalsize
+Práctica 1: Documentación. 
+
+Agosto de 2018
+
+\normalsize
+Instituto Politécnico Nacional
+
+
+\end{centering}
+
+\newpage
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Prerequisitos (Virtual)
+
+## Instalación de Virtual Box (Windows 10)
+
+Descargar la última versión de Virtual Box: <https://virtualbox/wiki/Downloads>.
+
+
+## Instalación de Vagrant (Windows 10)
+
+Descargar la última versión de Vagrant: <https://vagrantup.com/downloads.html>.
+
+## Uso de Tools-CIC
+
+Ejecutar desde la terminal (Powershell):
+
+```{shell}
+mkdir ~/Prac
+cd ~/Prac
+vagrant init nogala/centos --box-version 1
+vagrant plugin install vagrant-vbguest
+vagrant up
+vagrant ssh
+```
+
+Nota: Hacer update y upgrade
+
+```{shell}
+sudo yum update
+sudo yum upgrade
+```
+
+
+# 1) Cambio de nombre del host
+
+```{shell}
+sudo hostnamectl set-hostname vazquez
+```
+
+Para que el cambio tenga efecto se necesita reiniciar. 
+
+\begin{figure}[htbp]
+\centering
+\includegraphics{hostnamectl.png}
+\end{figure}
+
+
+# 2) Actualización y sincronización de la hora y fecha con servicio NTP
+
+Para cambiar la hora se puede elegir de una lista:
+
+```{shell}
+timedatectl list-timezones
+timedatectl set-timezone America/Mexico_City
+hwclock --systohc
+```
+
+Para el servicio NTP se instalará chronyd
+
+```{shell}
+yum install -y chronyd
+```
+
+Se cambia el archivo /etc/chrony.conf con  
+server 0.mx.pool.ntp.org  
+server 1.north-america.pool.ntp.org  
+server 2.north-america.pool.ntp.org  
+
+```{shell}
+nano /etc/chrony.conf
+systemctl start chronyd
+systemctl enable chronyd
+
+```
+
+Para verificar que se está funcionando correctamente y las fuentes que se están usando ejecutar:
+
+```{shell}
+timedatectl
+chronyc sources 
+```
+
+\begin{figure}[htbp]
+\centering
+\includegraphics{NTP.png}
+\end{figure}  
+
+# 3.a) Instalación de Java
+
+Se revisa la versión más reciente de Java desde el navegador y se realiza un wget (si no se tiene wget se instala):
+
+```{shell}
+yum install wget
+wget --no-cookies --no-check-certificate --header "Cookie:
+gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie"
+"http://download.oracle.com/otn-pub/java/jdk/8u181-b13/96a7b8442fe848ef90c96a2fad6ed6d1/
+jdk-8u181-linux-x64.rpm"
+```
+
+Se instala localmente desde la carpeta en donde lo descargamos:
+
+```{shell}
+yum localinstall -y jdk-8u181-linux-x64.rpm
+```
+
+Revisar y cambiar a la última versión de java con los comandos:
+
+```{shell}
+cd /usr/java
+ll
+alternatives --config java
+```
+
+Crear la variable de entorno HOME_JAVA (como root)
+
+```{shell}
+echo "export JAVA_HOME=/usr/java/latest" >> /etc/environment
+```
+
+Para revisar que la instalación haya sido correcta:
+
+```{shell}
+java -version
+echo $JAVA_HOME
+
+```
+
+\begin{figure}[htbp]
+\centering
+\includegraphics{java.png}
+\end{figure} 
+
+# 3.b) Instalación de Maven
+
+Ejecutar los comandos:
+
+
+```{shell}
+yum install yum-utils -y
+sudo yum install yum-utils -y
+sudo yum groupinstall "Development Tools" -y
+cd /usr/local/src
+wget http://www-eu.apache.org/dist/maven/maven-3/3.5.4/binaries/apache-maven-3.5.4-bin.tar.gz
+tar -xvzf apache-maven-3.5.4-bin.tar.gz 
+rm apache-maven-3.5.4-bin.tar.gz 
+mv apache-maven-3.5.4 apache-maven
+```
+
+Para cambiar los paths, crear un archivo en /etc/profile.d con nombre maven.sh que contenga lo siguiente:
+
+```{shell}
+cd /etc/profile.d/
+nano maven.sh
+```
+
+```{shell}
+# Apache Maven Environment Variables  
+# MAVEN_HOME for Maven 1 - M2_HOME for Maven 2  
+export M2_HOME=/usr/local/src/apache-maven
+export PATH=${M2_HOME}/bin:${PATH}
+```
+
+Permitir la ejecución de tal archivo con:
+```{shell}
+sudo chmod +x maven.sh
+```
+
+Para revisar que este instalado correctamente ejecutar:
+```{shell}
+mvn --version
+```
+
+\begin{figure}[htbp]
+\centering
+\includegraphics{maven.png}
+\end{figure} 
+
+# 3.c) Instalación de Python (Desde Código Fuente)
+
+Instalar prerequisitos:
+
+```{shell}
+sudo yum install gcc openssl-devel bzip2-devel libffi-devel -y
+```
+
+Buscar en internet la última versión de Python (Gzipped source tarball) y extraer en /usr/local/src 
+
+```{shell}
+cd /usr/local/src/
+sudo wget https://www.python.org/ftp/python/3.7.0/Python-3.7.0.tgz
+sudo tar xvzf Python-3.7.0.tgz
+
+```
+
+Entrar en la carpeta y configurar con los siguientes comandos
+
+
+```{shell}
+cd Python-3.7.0/
+sudo ./configure
+sudo make
+sudo make install
+
+```
+
+Para verificar que está instalado:
+
+
+```{shell}
+python3 --version
+```
+
+
+\begin{figure}[htbp]
+\centering
+\includegraphics{python.png}
+\end{figure} 
+
+# 4) Configuración de las herramientas de rendimiento y administración del sistema (tmux, htop, git)
+
+
+Para instalar tmux:
+
+```{shell}
+sudo yum install epel-release
+sudo yum install tmux
+```
+
+para instalar htop:
+
+```{shell}
+wget dl.fedoraproject.org/pub/epel/7/x86_64/Packages/e/epel-release-7-11.noarch.rpm
+sudo rpm -ihv epel-release-7-11.noarch.rpm 
+sudo yum install htop
+```
+
+Para git se recomienda crear otro (super)usuario:
+
+```{shell}
+sudo useradd marco
+sudo usermod -G wheel marco
+sudo passwd marco
+su marco
+```
+
+Para instalar git y configurar el usuario:
+
+```{shell}
+sudo yum install git -y
+sudo git config --global user.name "MARCOVH"
+sudo git config --global user.email "marcovazquezh@gmail.com"
+sudo git config --list
+```
+  
+Para crear un nuevo repositorio crearlo en la cuenta en github.com:
+
+\begin{figure}[htbp]
+\centering
+\includegraphics{github.png}
+\end{figure} 
+
+Crear la carpeta en la maquina junto con un archivo README.md y configurarlo para git con commit y push.
+
+
+```{shell}
+sudo mkdir Practica-1
+cd Practica-1
+sudo nano README.md
+sudo git init
+sudo git add README.md
+sudo git commit -m "primer commit"
+sudo git remote add origin https://github.com/MarcoVH/Practica-1.git
+sudo git push -u origin master
+```
+
+Si todo es correcto la pantalla mostrará:
+
+\begin{figure}[htbp]
+\centering
+\includegraphics{git.png}
+\end{figure} 
+
+Y el repositorio en github tendrá el README.md
+
+# 5) Instalación y configuración del servidor de web (httpd)
+
+NOTA: Para que funcione con vagrant, el archivo Vagrantfile debe de tener la línea  "config.vm.network "forwarded_port", guest: 80, host: 8080" no comentada.
+
+
+Para instalar httpd
+
+```{shell}
+sudo yum install httpd
+sudo service httpd start
+```
+
+Para checar que esté funcionando correctamente se ejecuta
+
+
+```{shell}
+sudo service httpd status
+```
+
+También tiene que aparecer la página de prueba de Apache HTTP server poniendo en el navegador localhost:8080 (de acuerdo al puerto que se configure en el Vagrantfile para virtualizaciones):
+
+\begin{figure}[htbp]
+\centering
+\includegraphics{httpd.png}
+\end{figure} 
+
