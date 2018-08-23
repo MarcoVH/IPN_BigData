@@ -1,0 +1,81 @@
+    1  cd ~
+    2  pwd
+    3  nano HelloWorldApp.java
+    4  javac HelloWorldApp.java
+    5  java HelloWorldApp.java
+    6  ls
+    7  java HelloWorldApp
+    8  nano /etc/sudoers
+    9  cd /etc/sudoers
+   10  cd/etc
+   11  cd /etc
+   12  ls
+   13  ll
+   14  nano sudoers
+   15  sudo nano sudoers
+   16  su vagrant
+   17  su vagrant 
+   18  exit
+   19  id
+   20  cd ~
+   21  cd
+   22  pwd
+   23  id
+   24  cls
+   25  clear
+   26  time
+   27  clear
+   28  date
+   29  java HelloWorldApp.java
+   30  pwd
+   31  ll
+   32  clear
+   33  date
+   34  java HelloWorldApp
+   35  pwd
+   36  usermod -h
+   37  sudo usermod -h
+   38  su vagrant
+   39  exit
+   40  cd
+   41  ll
+   42  sudo visudo
+   43  exit
+   44  pwd
+   45  cd
+   46  pwd
+   47  sudo ls
+   48  sudo hwclock --systohc
+   49  exit
+   50  cd home
+   51  cd 
+   52  pwd
+   53  git config --global user.email "marcovazquezh@gmail.com"
+   54  git config -list
+   55  git config --list
+   56  git --version
+   57  sudo mkdir IPN_BigData
+   58  ll
+   59  cd IPN_BigData
+   60  echo "# IPN_BigData" >> README.md
+   61  sudo echo "# IPN_BigData" >> README.md
+   62  git init
+   63  ll
+   64  cd ..
+   65  ls -l
+   66  sudo rm IPN_BigData
+   67  sudo rm -r IPN_BigData
+   68  ll
+   69  mkdir IPN_BigData
+   70  ll -l
+   71  cd IPN_BigData
+   72  echo "# IPN_BigData" >> README.md
+   73  git init
+   74  git add README.md
+   75  git commit -m "first commit*"
+   76  git remote add origin https://github.com/MARCOVH/IPN_BigData.git
+   77  git push -u origin master
+   78  git branch -a
+   79  git chechout -b comandos
+   80  git checkout -b comandos
+   81  history >> comandos.txt
