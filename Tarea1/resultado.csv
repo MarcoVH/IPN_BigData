@@ -1,0 +1,12 @@
+,Concepto,Valor
+0,No. de registros,3588920
+1,Vehículos diferentes,25
+2,No. de días diferentes,45
+3,Rango de Fechas,De 2018-01-16 a 2018-04-04
+4,Meses completos,2
+5,Horario de la flota,De 00:00:00 a 23:59:59
+6,Velocidad máxima registrada,92
+7,Vehículos que registran la velocidad máxima,"['b21', 'b19', 'b49', 'b24']"
+8,No. de Vehículos que rebasan el límite de velocidad,16
+9,Vehículos que rebasan el límite de velocidad,"['b2E', 'b17', 'b23', 'b46', 'b21', 'b16', 'b44', 'b4E', 'b2D', 'b17C', 'b19', 'b47', 'b4C', 'b2C', 'b49', 'b24']"
+10,Horas con mayor frecuencia de excesos de velocidad,"[11, 12]"
