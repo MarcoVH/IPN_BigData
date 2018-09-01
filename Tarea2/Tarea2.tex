@@ -1,0 +1,227 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\newcommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+
+  \title{}
+    \pretitle{\vspace{\droptitle}}
+  \posttitle{}
+    \author{}
+    \preauthor{}\postauthor{}
+    \date{}
+    \predate{}\postdate{}
+  
+\usepackage{float}
+
+\begin{document}
+
+\begin{centering}
+
+\vspace*{5 cm}
+
+\Huge
+
+{\bf Introducción a Python}
+
+\vspace{3 cm}
+
+\Large
+Marco Andrés Vázquez Hernández
+
+\vspace{1 cm}
+\normalsize
+Tarea 2
+
+Agosto de 2018
+
+\normalsize
+Instituto Politécnico Nacional
+
+
+\end{centering}
+
+\newpage
+
+\section{Descripción}\label{descripcion}
+
+Generar el modelo de regresión simple utilizando la distancia y el
+combustible y responder las siguientes preguntas
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\ImportTok{import}\NormalTok{ pandas }\ImportTok{as}\NormalTok{ pd}
+\ImportTok{from}\NormalTok{ pylab }\ImportTok{import}\NormalTok{ plot,show}
+\NormalTok{df }\OperatorTok{=}\NormalTok{ pd.read_csv(}\StringTok{'distanciaCombustible.csv'}\NormalTok{)}
+\NormalTok{dist }\OperatorTok{=}\NormalTok{ np.array(df[}\StringTok{'distance'}\NormalTok{])}
+\NormalTok{comb }\OperatorTok{=}\NormalTok{ np.array(df[}\StringTok{'litros'}\NormalTok{])}
+\NormalTok{rend }\OperatorTok{=}\NormalTok{ comb}\OperatorTok{/}\NormalTok{dist}
+\NormalTok{A }\OperatorTok{=}\NormalTok{ np.array([ dist, np.ones(}\BuiltInTok{len}\NormalTok{(dist))])}
+\NormalTok{y }\OperatorTok{=}\NormalTok{ comb}
+\NormalTok{w }\OperatorTok{=}\NormalTok{ np.linalg.lstsq(A.T,y, rcond}\OperatorTok{=}\VariableTok{None}\NormalTok{)[}\DecValTok{0}\NormalTok{]}
+\NormalTok{line }\OperatorTok{=}\NormalTok{ (w[}\DecValTok{0}\NormalTok{]}\OperatorTok{*}\NormalTok{dist}\OperatorTok{+}\NormalTok{w[}\DecValTok{1}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{1.- ¿Cuánto combustible se necesitará para recorrer 100, 200
+y 500
+Km?}\label{cuanto-combustible-se-necesitara-para-recorrer-100-200-y-500-km}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\BuiltInTok{print}\NormalTok{(w[}\DecValTok{0}\NormalTok{]}\OperatorTok{*}\DecValTok{100}\OperatorTok{+}\NormalTok{w[}\DecValTok{1}\NormalTok{])}
+\BuiltInTok{print}\NormalTok{(w[}\DecValTok{0}\NormalTok{]}\OperatorTok{*}\DecValTok{200}\OperatorTok{+}\NormalTok{w[}\DecValTok{1}\NormalTok{])}
+\BuiltInTok{print}\NormalTok{(w[}\DecValTok{0}\NormalTok{]}\OperatorTok{*}\DecValTok{500}\OperatorTok{+}\NormalTok{w[}\DecValTok{1}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+29.93402491684617 58.35261574672957 143.60838823637977
+
+\subsection{2 .- ¿Con 200 litros de combustible aproximadamente cuántos
+Kilómetros podrá recorrer un
+vehículo?}\label{con-200-litros-de-combustible-aproximadamente-cuantos-kilometros-podra-recorrer-un-vehiculo}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\BuiltInTok{print}\NormalTok{((}\DecValTok{200}\OperatorTok{-}\NormalTok{w[}\DecValTok{1}\NormalTok{])}\OperatorTok{/}\NormalTok{w[}\DecValTok{0}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+698.4321182608463
+
+\subsection{Obtener el coeficiente de correlación de las
+variables}\label{obtener-el-coeficiente-de-correlacion-de-las-variables}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\BuiltInTok{print}\NormalTok{(np.corrcoef(dist.tolist(), comb.tolist())[}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+0.8699436836892168
+
+\subsection{Graficar los resultados}\label{graficar-los-resultados}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{plot(dist,y,}\StringTok{'o'}\NormalTok{,dist,line,}\StringTok{'r-'}\NormalTok{, markersize}\OperatorTok{=}\NormalTok{.}\DecValTok{5}\NormalTok{)}
+\NormalTok{show()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics{Figure_1.png}
+\end{figure}
+
+
+\end{document}
