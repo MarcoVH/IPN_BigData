@@ -1,0 +1,194 @@
+---
+output:
+  pdf_document:
+    fig_caption: yes
+    keep_tex: yes
+    #latex_engine: xelatex
+header-includes: \usepackage{float}
+---
+
+\begin{centering}
+
+\vspace*{5 cm}
+
+\Huge
+
+{\bf Bases de datos con MySQL (y Python)}
+
+\vspace{3 cm}
+
+\Large
+Marco Andrés Vázquez Hernández
+
+\vspace{1 cm}
+\normalsize
+Práctica Mysql
+
+Septiembre de 2018
+
+\normalsize
+Instituto Politécnico Nacional
+
+
+\end{centering}
+
+\newpage
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# Descripción
+Generar al menos 5 tablas con al menos 3 registros (los registros pueden ser ficticios) de la estructura de university
+
+El código para tal es el siguiente:
+
+```{python echo=TRUE, eval=FALSE}
+
+import mysql.connector
+from mysql.connector import errorcode
+
+
+def create_database(cursor):
+    try:
+        cursor.execute(
+            "CREATE DATABASE {} DEFAULT CHARACTER SET 'utf8mb4'".format(DB_NAME))
+    except mysql.connector.Error as err:
+        print("Failed creating database: {}".format(err))
+        exit(1)
+
+
+
+config = {
+  'user': 'root',
+  'password': 'Cic1234*',
+  'host': '127.0.0.1',
+# 'database': 'university',
+  'raise_on_warnings': True
+}
+
+cnx = mysql.connector.connect(**config)
+cursor = cnx.cursor(buffered=True)
+
+DB_NAME = 'university2'
+TABLES = {}
+TABLES['department'] = (
+    "CREATE TABLE `department` ("
+    "`dept_name` varchar(20) NOT NULL DEFAULT '',"
+    "`building` varchar(15) DEFAULT NULL,"
+    "`budget` decimal(12,2) DEFAULT NULL,"
+    "PRIMARY KEY (`dept_name`)"
+    ") ENGINE=InnoDB DEFAULT CHARSET=utf8;")
+
+TABLES['student'] = (
+"CREATE TABLE `student` ("
+      "`ID` varchar(5) NOT NULL DEFAULT '',"
+     "`name` varchar(20) NOT NULL,"
+     "`dept_name` varchar(20) DEFAULT NULL,"
+     "`tot_cred` decimal(3,0) DEFAULT NULL,"
+     "PRIMARY KEY (`ID`),"
+     "KEY `dept_name` (`dept_name`),"
+    "CONSTRAINT `student_ibfk_1` FOREIGN KEY (`dept_name`) REFERENCES `department` (`dept_name`)"
+    ") ENGINE=InnoDB DEFAULT CHARSET=utf8;")
+
+TABLES['instructor'] = (
+    "CREATE TABLE `instructor` ("
+    "`ID` varchar(5) NOT NULL DEFAULT '',"
+    "`name` varchar(20) NOT NULL,"
+    "`dept_name` varchar(20) DEFAULT NULL,"
+    "`salary` decimal(8,2) DEFAULT NULL,"
+    "PRIMARY KEY (`ID`),"
+     "KEY `dept_name` (`dept_name`),"
+     "CONSTRAINT `instructor_ibfk_1` FOREIGN KEY (`dept_name`) REFERENCES `department` (`dept_name`)"
+    ") ENGINE=InnoDB DEFAULT CHARSET=utf8;")
+
+TABLES['advisor'] = (
+    "CREATE TABLE `advisor` ("
+  "`s_ID` varchar(5) NOT NULL DEFAULT '',"
+  "`i_ID` varchar(5) DEFAULT NULL,"
+  "PRIMARY KEY (`s_ID`),"
+  "KEY `i_ID` (`i_ID`),"
+  "CONSTRAINT `advisor_ibfk_1` FOREIGN KEY (`i_ID`) REFERENCES `instructor` (`ID`) ON DELETE SET NULL,"
+  "CONSTRAINT `advisor_ibfk_2` FOREIGN KEY (`s_ID`) REFERENCES `student` (`ID`) ON DELETE CASCADE"
+    ") ENGINE=InnoDB DEFAULT CHARSET=utf8;")
+
+TABLES['course'] = (
+"    CREATE TABLE `course` ("
+  "`course_id` varchar(8) NOT NULL DEFAULT '',"
+  "`title` varchar(50) DEFAULT NULL,"
+  "`dept_name` varchar(20) DEFAULT NULL,"
+  "`credits` decimal(2,0) DEFAULT NULL,"
+  "PRIMARY KEY (`course_id`),"
+  "KEY `dept_name` (`dept_name`),"
+  "CONSTRAINT `course_ibfk_1` FOREIGN KEY (`dept_name`) REFERENCES `department` (`dept_name`)"
+") ENGINE=InnoDB DEFAULT CHARSET=utf8;")
+
+try:
+    cnx.database = DB_NAME  
+except mysql.connector.Error as err:
+    if err.errno == errorcode.ER_BAD_DB_ERROR:
+        create_database(cursor)
+        cnx.database = DB_NAME
+    else:
+        print(err)
+        exit(1)
+
+for name, ddl in TABLES.iteritems():
+    try:
+        print("Creating table {}: ".format(name))
+        cursor.execute(ddl)
+    except mysql.connector.Error as err:
+        if err.errno == errorcode.ER_TABLE_EXISTS_ERROR:
+            print("already exists.")
+        else:
+            print(err.msg)
+    else:
+        print("OK")
+
+
+query = ("INSERT INTO `department` VALUES ('Accounting','Saucon',441840.92),('Astronomy','Taylor',617253.94),('Athletics','Bronfman',734550.70);")
+cursor.execute(query)
+cnx.commit()
+
+query = ("INSERT INTO `course` VALUES ('101','Diffusion and Phase Transformation','Accounting',3),('102','Image Processing','Astronomy',3),('103','Differential Equations','Athletics',3);")
+cursor.execute(query)
+cnx.commit()
+
+query = ("INSERT INTO `student` VALUES ('1000','Manber','Accounting',39),('10033','Zelty','Astronomy',60),('10076','Duan','Athletics',105);")
+cursor.execute(query)
+cnx.commit()
+
+query = ("INSERT INTO `instructor` VALUES ('14365','Lembr','Accounting',32241.56),('15347','Bawa','Astronomy',72140.88),('16807','Yazdi','Athletics',98333.65);")
+cursor.execute(query)
+cnx.commit()
+
+query = ("INSERT INTO `advisor` VALUES ('1000','14365'),('10033','15347'),('10076','16807');")
+cursor.execute(query)
+cnx.commit()
+
+cursor.close()
+cnx.close()
+```
+
+Nota: Se modificaron los datos para que no hubiera problemas de llaves referenciadas que no existen y por lo tanto algunos datos pueden no tener sentido.
+
+Ejecución y chequeo de database:
+
+\begin{figure}[htbp]
+\centering
+\includegraphics{ejec.png}
+\end{figure} 
+
+Chequeo de tablas y contenido:
+
+\begin{figure}[htbp]
+\centering
+\includegraphics{tablas1.png}
+\end{figure} 
+
+
+\begin{figure}[htbp]
+\centering
+\includegraphics{tablas2.png}
+\end{figure} 
