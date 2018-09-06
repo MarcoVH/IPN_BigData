@@ -7,7 +7,7 @@ db = client["test"]
 collection = db["data"]
 
 data = db.data.find()
-docs = data.count()
+docs = db.data.count()
  
 cols={}
 for document in data:
