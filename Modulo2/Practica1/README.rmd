@@ -1,0 +1,14 @@
+Instrucciones 
+1.	Integrar los cuatro archivos en una tabla llamada statusVehiculo
+2.	Trasformar los datos a distancia recorrida y combustible utilizado de cada vehículo por DIA, utilizando los siguientes diagnósticos
+a.	'DiagnosticTotalFuelUsedId'
+b.	'DiagnosticOdometerId'
+3.	Graficar la relación entre distancia y combustible diario.
+4.	Sacar el modelo de regresión lineal y = a*x + b
+5.	Predecir los valores con ruido o sucios con el modelo anterior
+6.	Contestar lo siguiente:
+a.	¿Qué vehículo da mayor rendimiento?
+b.	¿Qué vehículo trabajó mas días?
+c.	¿Cuál es el combustible total utilizado por la flota por semana?
+d.	¿Cuál es la correlación entre ambas variables (distancia, combustible)?
+7. Documentar los resultados
