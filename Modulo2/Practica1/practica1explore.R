@@ -145,3 +145,9 @@ totalf<-aggregate(totalv$dif, by=list(totalv$s), sum)
 colnames(totalf)<-c("Semana","Total_gasolina")
 totalf
 
+# Correlación de distancia y combustible
+cor(plo$odomdif, plo$fueldif)
+
+
+
+
