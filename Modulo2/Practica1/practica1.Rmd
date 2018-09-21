@@ -1,0 +1,342 @@
+---
+output:
+  pdf_document:
+    fig_caption: yes
+    keep_tex: yes
+header-includes: \usepackage{float}
+---
+
+\begin{centering}
+
+\vspace*{5 cm}
+
+\Huge
+
+{\bf Procesamiento de datos}
+
+\vspace{3 cm}
+
+\Large
+Marco Andrés Vázquez Hernández
+
+\vspace{1 cm}
+\normalsize
+Práctica 1. 
+
+Septiembre de 2018
+
+\normalsize
+Instituto Politécnico Nacional
+
+
+\end{centering}
+
+\newpage
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Descripción
+
+Instrucciones  
+
+1.	Integrar los cuatro archivos en una tabla llamada statusVehiculo
+2.	Trasformar los datos a distancia recorrida y combustible utilizado de cada vehículo por DIA, utilizando los siguientes diagnósticos
+  a.	'DiagnosticTotalFuelUsedId'
+  b.	'DiagnosticOdometerId'
+3.	Graficar la relación entre distancia y combustible diario.
+4.	Sacar el modelo de regresión lineal y = a*x + b
+5.	Predecir los valores con ruido o sucios con el modelo anterior
+6.	Contestar lo siguiente:
+  a.	¿Qué vehículo da mayor rendimiento?
+  b.	¿Qué vehículo trabajó mas días?
+  c.	¿Cuál es el combustible total utilizado por la flota por semana?
+  d.	¿Cuál es la correlación entre ambas variables (distancia, combustible)?
+7. Documentar los resultados
+
+Para la elaboración de la práctica se utilizó la herramienta R Studio.
+
+# Integración de los archivos
+
+Se cargaron los datos desde los archivos .csv y se unieron por filas para crear una tabla con las clumnas  "vehiculo","fecha","diagnostico" y "valor".  
+
+```{r, cache=T}
+wd<-"C:/Users/marco/IPN_BigData/Modulo2/Práctica 1"
+setwd(wd)
+library(reshape2)
+data1<-read.csv("StatusData.csv", header=F)
+data2<-read.csv("StatusData2.csv", header=F)
+data3<-read.csv("StatusData3.csv", header=F)
+data4<-read.csv("StatusData4.csv", header=F)
+data<-rbind(data1,data2,data3,data4)
+colnames(data)<-c("vehiculo","fecha","diagnostico","valor")
+
+```
+
+# Transformación de datos.
+
+##Limpiado de datos.
+
+Primero se filtraron los datos para incluir solo las variables "DiagnosticTotalFuelUsedId"  y "DiagnosticOdometerId"; se crearon fechas adicionales con los formatos adecuados y se separaron los datos en dos tablas (para cada variable).  
+
+```{r, cache=T}
+tidy<-data[data$diagnostico %in% c("DiagnosticTotalFuelUsedId","DiagnosticOdometerId"),]
+tidy<-tidy[!duplicated(tidy),]
+
+tidy$fecha2<-gsub("T"," ", tidy$fecha)
+tidy$fecha2<-gsub("Z","", tidy$fecha2)
+tidy$fecha2<-as.POSIXct(tidy$fecha2)
+tidy$fecha3<-as.Date(tidy$fecha2)
+
+odom<-tidy[tidy$diagnostico=="DiagnosticOdometerId",]
+fuel<-tidy[tidy$diagnostico=="DiagnosticTotalFuelUsedId",]
+```
+
+## Agrupación por día.
+Se agruparon los datos por día tomando el valor mínimo del día.  
+
+```{r, cache=T}
+aggodom<-aggregate(odom$valor, by=list(odom$vehiculo, odom$fecha3), min)
+colnames(aggodom)<-c("vehiculo","fecha3","odom")
+aggfuel<-aggregate(fuel$valor, by=list(fuel$vehiculo, fuel$fecha3),min)
+colnames(aggfuel)<-c("vehiculo","fecha3","fuel")
+```
+
+## Normalización de valores por lag diff.
+
+Debido a que los odómetros y la cantidad acumulada de combustible de cada vehículo puede variar de acuerdo a la antiguedad del vehículo, se hizo una normalización por medio de considerar las diferencias entre cada día. En otras palabras, para cada vehículo se ajustó el valor para que en vez de tomar en cuenta el acumulado se tomara la distancia recorrida y lo que consumió de gasolina únicamente en ese día.
+
+Esto hace que el primer día ambos valores; distancia y combustible sean cero. Es decir, debido a que no se tienen los datos del día anterior el primer día se considera el "inicio" y por tanto sus valores serán 0 en ambos casos.  
+
+```{r, cache=T}
+# Normalización de valores por lag diff
+
+for (v in unique(aggodom$vehiculo)){
+  aux2<-aggodom[aggodom$vehiculo==v,]
+  aux2<-aux2[order(aux2$fecha3),]
+  aux2$odomdif<-c(0,diff(aux2$odom))
+  if(v == "A1"){
+    aux3<-aux2
+  } else {
+    aux3 <- rbind(aux3,aux2)
+  }
+}
+aggodom2<-aux3
+aux3<-NULL
+
+for (v in unique(aggfuel$vehiculo)){
+  aux2<-aggfuel[aggfuel$vehiculo==v,]
+  aux2<-aux2[order(aux2$fecha3),]
+  aux2$fueldif<-c(0,diff(aux2$fuel))
+  if(v == "A1"){
+    aux3<-aux2
+  } else {
+    aux3 <- rbind(aux3,aux2)
+  }
+}
+aggfuel2<-aux3
+aux3<-NULL
+```
+
+
+## Unión de tablas.
+
+Finalmente se unieron ambas tablas por vehículo y fecha y se calcula la variable de rendimiento.
+  
+
+```{r, cache=T}
+dataf<-aggodom2
+colnames(dataf)<-c("vehiculo","fecha3","odom","odomdif")
+colnames(aggfuel2)<-c("vehiculo","fecha3","fuel","fueldif")
+dataf<-merge(dataf, aggfuel2, by=c("vehiculo","fecha3"), all.x=T, all.y=T)
+
+dataf$rendimiento<-dataf$odomdif/dataf$fueldif
+
+```
+
+Por ejemplo, para el vehículo A2 los datos quedan:  
+
+```{r, cache=T}
+dataf[dataf$vehiculo=="A2",]
+```
+
+
+# Gráfica de relación distancia combustible
+
+La gráfica de la relación distancia-combustible con los diferentes vehículos en colores:
+
+```{r, cache=T}
+plot(dataf$odomdif, dataf$fueldif, pch=20, col=dataf$vehiculo)
+```
+
+De donde, tanto en la tabla de ejemplo para el vehículo A1 como en la gráfica se puede observar la presencia de ruido en los datos.
+
+# Deteccíon y Tipificación de datos faltantes y Outliers.
+
+## Deteccíon y Tipificación de datos faltantes.
+
+Se creó una variable para tipificar las anomalías que se analizaron. 
+
+Primero, se tipificaron los datos que aunque sus valores seguramente son atípicos, por definición sabemos que no lo son como aquellos en donde ambos valores (distancia y gasolina) son cero, ya que pueden deberse a que el vehículo se encuentra parado o aquellos casos en donde se toma como inicio en la serie de los datos. 
+
+Esto mismo pasa en los casos en donde no hubo cambio en el combustible y por tanto el agrupado de combustible del día se reporta como NA o aquellos en los que simplemente el dato de gasolina no fue registrado en todo el día. Estos casos se tipifican como "Dato faltante gasolina".
+
+También están los casos en donde no se registra cambio en el odómetro pero se registra un cambio en la gasolina; esto puede deberse a que las mediciones de ambas variables no se toman al mismo tiempo y por lo general los casos se presentan, de hecho, después de un "descanso" del vehículo, es decir una anomalía de tipo "Vehículo parado" o una anomalía de tipo "Dato faltante gasolina". Dichos datos se tipifican como "Dato inconsistente distancia".
+
+
+```{r, cache=T}
+# No anomalias 
+dataf$anomalia<-ifelse((dataf$fueldif==0|is.na(dataf$fueldif))&dataf$odomdif==0,"Vehículo parado/Inicio",
+                              ifelse(dataf$odomdif==0&dataf$fueldif>0, "Dato inconsistente distancia",
+                                     ifelse(is.na(dataf$fueldif),"Dato faltante gasolina",
+                                            "No anomalía")))
+
+```
+
+## Deteccíon y Tipificación de valores anomálicos.
+
+Se analizaron los datos que resultaron no ser faltantes o anomálicos en el sentido antes comentado para verificar si existen valores atípicos los cuales serán descartados del modelaje de predicción.
+
+Se elaboró un boxplot para la variable rendimiento y a partir de ello se determinaron los valores que son atípicos y se clasificaron como "Valor anomálico".
+
+```{r, cache=T}
+
+# Valores anomálicos
+
+plo<-dataf[dataf$anomalia=="No anomalía",]
+bxo<-boxplot(plo$rendimiento)
+dataf$anomalia<-ifelse(dataf$rendimiento %in% bxo$out[bxo$out!=0], "Valor anomálico",dataf$anomalia)
+dataf$anomalia<-as.factor(dataf$anomalia)
+```
+
+La gráfica con los datos anomálicos en rojo (Datos faltantes) y azul (valores anomálicos) queda:
+
+```{r, cache=F}
+plot(dataf$odomdif, dataf$fueldif, col=dataf$anomalia, pch=20)
+```
+
+## Modelo de regresión
+
+Se tomaron todos los datos que no fueran anomalías por datos faltantes o valores atípicos y se elaboró un modelo de regresión lineal forzando el intercepto en 0,0 ya que es lógico que con 0 gasolina se recorren 0 unidades de distancia y viceversa análogamente. Se obtienen los siguientes resultados:
+
+```{r}
+tidy2<-dataf[dataf$anomalia=="No anomalía",]
+
+lmod <- lm(tidy2$fueldif ~ 0+ tidy2$odomdif) 
+summary(lmod)
+```
+
+Donde se puede observar que el p-value es muy cercano a 0 y el valor de la prueba R cuadrada y Rcuadrada ajustada es muy cercano a 1. Nota: Las demás pruebas estadísticas como lo son la prueba de normalidad de los residuos, entre otras, salen del alcance de esta práctica.
+
+La gráfica del modelo queda:
+
+```{r}
+plot(tidy2$odomdif, tidy2$fueldif, pch=20)
+abline(lmod, lwd=2, col="blue")
+```
+
+
+## Imputación de valores
+
+Si la tabla fuera a ser usada para alguna apllicación y/o reporte diario de dichas métricas de la flota sería recomendable imputar los valores faltantes:
+
+1. En los casos en los que el dato del gasolina falta o en los casos en que el vehículo estuvo parado, se puede suponer que las mediciones no coincidieron y por tanto es mejor estimar de acuerdo a la regresión lineal antes hecha.
+
+2. En los casos en los que el dato de la distancia es cero pero la gasolina no, también se puede asumir que los datos no coincidieron.
+
+3. Se calcula de nuevo el rendimiento.
+
+4. En el caso de los valores atípicos no se recomienda imputar los valores ya que es muy probable que se deba a que el vehículo estuvo en tráfico e imputar esos valores sería perder información real.
+
+
+```{r}
+# Imputación de valores 
+
+supertidy<-dataf[,-c(3,5)]
+supertidy$fueldif<-ifelse(supertidy$anomalia %in% c("Vehículo parado/Inicio","Dato faltante gasolina"),
+                      lmod$coefficients[[1]]*supertidy$odomdif,
+                      supertidy$fueldif)
+supertidy$odomdif<-ifelse(supertidy$anomalia %in% c("Dato inconsistente distancia"),
+                          supertidy$fueldif/lmod$coefficients[[1]],
+                          supertidy$odomdif)
+supertidy$rendimiento<-supertidy$odomdif/supertidy$fueldif
+
+```
+
+En el ejemplo anterior del vehículo A2 la tabla "limpia" con datos imputados queda:
+
+```{r}
+supertidy[supertidy$vehiculo=="A2",]
+```
+
+
+## Preguntas.
+Nota: Se tomaron los datos limpios, es decir sin considerar anomalías excepto en el inciso c.
+
+
+a.	¿Qué vehículo da mayor rendimiento?
+
+```{r}
+# vehículo con mayor rendimiento
+aux<-aggregate(plo$rendimiento, by=list(plo$vehiculo), mean)
+colnames(aux)<-c("Vehículo","rendimiento_promedio")
+aux<-aux[order(aux$rendimiento_promedio, decreasing=T),]
+aux
+
+```
+
+b.	¿Qué vehículo trabajó mas días?
+
+```{r}
+# Vehículo que trabajó más días
+aux<-aggregate(plo$fecha3, by=list(plo$vehiculo), min)
+colnames(aux)<-c("Vehículo","min")
+aux2<-aggregate(plo$fecha3, by=list(plo$vehiculo), max)
+colnames(aux2)<-c("Vehículo","max")
+aux3<-merge(aux, aux2, by="Vehículo")
+aux3$dif<-aux3$max-aux3$min
+aux3<-aux3[order(aux3$dif, decreasing=T),]
+aux3
+```
+
+c.	¿Cuál es el combustible total utilizado por la flota por semana?
+
+```{r}
+# Combustible total de la flota por semana
+
+library(lubridate)
+aux<-fuel
+aux$semana<-week(ymd(as.character(aux$fecha3)))
+
+totalv<-aggregate(aux$valor, by=list(aux$vehiculo, aux$semana), min)
+colnames(totalv)<-c("v","s","min")
+aux2<-aggregate(aux$valor, by=list(aux$vehiculo, aux$semana), max)
+colnames(aux2)<-c("v","s","max")
+totalv<-merge(totalv, aux2, by=c("v","s"))
+totalv$dif<-totalv$max-totalv$min
+
+totalf<-aggregate(totalv$dif, by=list(totalv$s), sum)
+colnames(totalf)<-c("Semana","Total_gasolina")
+totalf
+```
+
+
+d.	¿Cuál es la correlación entre ambas variables (distancia, combustible)?
+Correlación de Pearson:
+
+```{r}
+cor(plo$odomdif, plo$fueldif)
+```
+
+
+
+
+
+
+
+
+
