@@ -1,0 +1,4 @@
+Utilizar los datos que se proporcionan para encontrar:
+1.- Representación de las transacciones de cada mes (Transacción, [Productos])
+2.- Representación binaria de los datos de transacciones 
+3.- Encontrar los patrones frecuentes utilizando un soporte de 0.001
