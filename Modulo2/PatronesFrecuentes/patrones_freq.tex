@@ -1,0 +1,323 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\newcommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+
+  \title{}
+    \pretitle{\vspace{\droptitle}}
+  \posttitle{}
+    \author{}
+    \preauthor{}\postauthor{}
+    \date{}
+    \predate{}\postdate{}
+  
+\usepackage{float}
+
+\begin{document}
+
+\begin{centering}
+
+\vspace*{5 cm}
+
+\Huge
+
+{\bf Descubrimiento del Conocimiento usando herramientas de Big Data Módulo 2}
+
+\vspace{3 cm}
+
+\Large
+Marco Andrés Vázquez Hernández
+
+\vspace{1 cm}
+\normalsize
+Práctica Patrones Comúnes. 
+
+Septiembre de 2018
+
+\normalsize
+Instituto Politécnico Nacional
+
+
+\end{centering}
+
+\newpage
+
+\section{Descripción}\label{descripcion}
+
+Utilizar los datos que se proporcionan para encontrar:
+
+1.- Representación de las transacciones de cada mes (Transacción,
+{[}Productos{]})
+
+2.- Representación binaria de los datos de transacciones
+
+3.- Encontrar los patrones frecuentes utilizando un soporte de 0.001
+
+\section{Planteamiento}\label{planteamiento}
+
+Se plantea la pregunta a contestar: ¿Que secciones de la tienda deberían
+de estar juntas (físicamente) para pomover las ventas?
+
+Se tomó la variable product\_subcategory como indicadora de las
+secciones de la tienda. como dicha variable está contenida en los datos
+de las ventas mensuales, no se usaron los datos del archivo de productos
+
+\section{Carga de archivos}\label{carga-de-archivos}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(}\StringTok{"arules"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Loading required package: Matrix
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Attaching package: 'arules'
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:base':
+## 
+##     abbreviate, write
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(}\StringTok{"ggplot2"}\NormalTok{)}
+\CommentTok{#install.packages("magrittr")}
+\KeywordTok{library}\NormalTok{(}\StringTok{"magrittr"}\NormalTok{)}
+\KeywordTok{setwd}\NormalTok{(}\StringTok{"C:/Users/marco/IPN_BigData/Modulo2/Practica_patrones_frecuentes"}\NormalTok{)}
+
+\NormalTok{ventas01<-}\KeywordTok{read.table}\NormalTok{(}\StringTok{"sales_01_Jan"}\NormalTok{,}\DataTypeTok{nrows =} \OperatorTok{-}\DecValTok{1}\NormalTok{,}\DataTypeTok{sep=}\StringTok{"|"}\NormalTok{,}\DataTypeTok{quote=}\StringTok{"}\CharTok{\textbackslash{}"}\StringTok{"}\NormalTok{,}\DataTypeTok{header=}\NormalTok{T)}
+\NormalTok{ventas02<-}\KeywordTok{read.table}\NormalTok{(}\StringTok{"sales_02_Feb"}\NormalTok{,}\DataTypeTok{nrows =} \OperatorTok{-}\DecValTok{1}\NormalTok{,}\DataTypeTok{sep=}\StringTok{"|"}\NormalTok{,}\DataTypeTok{quote=}\StringTok{"}\CharTok{\textbackslash{}"}\StringTok{"}\NormalTok{,}\DataTypeTok{header=}\NormalTok{T)}
+\NormalTok{ventas03<-}\KeywordTok{read.table}\NormalTok{(}\StringTok{"sales_03_Mar"}\NormalTok{,}\DataTypeTok{nrows =} \OperatorTok{-}\DecValTok{1}\NormalTok{,}\DataTypeTok{sep=}\StringTok{"|"}\NormalTok{,}\DataTypeTok{quote=}\StringTok{"}\CharTok{\textbackslash{}"}\StringTok{"}\NormalTok{,}\DataTypeTok{header=}\NormalTok{T)}
+\NormalTok{ventas04<-}\KeywordTok{read.table}\NormalTok{(}\StringTok{"sales_04_Apr"}\NormalTok{,}\DataTypeTok{nrows =} \OperatorTok{-}\DecValTok{1}\NormalTok{,}\DataTypeTok{sep=}\StringTok{"|"}\NormalTok{,}\DataTypeTok{quote=}\StringTok{"}\CharTok{\textbackslash{}"}\StringTok{"}\NormalTok{,}\DataTypeTok{header=}\NormalTok{T)}
+\NormalTok{ventas05<-}\KeywordTok{read.table}\NormalTok{(}\StringTok{"sales_05_May"}\NormalTok{,}\DataTypeTok{nrows =} \OperatorTok{-}\DecValTok{1}\NormalTok{,}\DataTypeTok{sep=}\StringTok{"|"}\NormalTok{,}\DataTypeTok{quote=}\StringTok{"}\CharTok{\textbackslash{}"}\StringTok{"}\NormalTok{,}\DataTypeTok{header=}\NormalTok{T)}
+\NormalTok{ventas06<-}\KeywordTok{read.table}\NormalTok{(}\StringTok{"sales_06_Jun"}\NormalTok{,}\DataTypeTok{nrows =} \OperatorTok{-}\DecValTok{1}\NormalTok{,}\DataTypeTok{sep=}\StringTok{"|"}\NormalTok{,}\DataTypeTok{quote=}\StringTok{"}\CharTok{\textbackslash{}"}\StringTok{"}\NormalTok{,}\DataTypeTok{header=}\NormalTok{T)}
+\NormalTok{ventas07<-}\KeywordTok{read.table}\NormalTok{(}\StringTok{"sales_07_Jul"}\NormalTok{,}\DataTypeTok{nrows =} \OperatorTok{-}\DecValTok{1}\NormalTok{,}\DataTypeTok{sep=}\StringTok{"|"}\NormalTok{,}\DataTypeTok{quote=}\StringTok{"}\CharTok{\textbackslash{}"}\StringTok{"}\NormalTok{,}\DataTypeTok{header=}\NormalTok{T)}
+\NormalTok{ventas08<-}\KeywordTok{read.table}\NormalTok{(}\StringTok{"sales_08_Aug"}\NormalTok{,}\DataTypeTok{nrows =} \OperatorTok{-}\DecValTok{1}\NormalTok{,}\DataTypeTok{sep=}\StringTok{"|"}\NormalTok{,}\DataTypeTok{quote=}\StringTok{"}\CharTok{\textbackslash{}"}\StringTok{"}\NormalTok{,}\DataTypeTok{header=}\NormalTok{T)}
+\NormalTok{ventas09<-}\KeywordTok{read.table}\NormalTok{(}\StringTok{"sales_09_Sep"}\NormalTok{,}\DataTypeTok{nrows =} \OperatorTok{-}\DecValTok{1}\NormalTok{,}\DataTypeTok{sep=}\StringTok{"|"}\NormalTok{,}\DataTypeTok{quote=}\StringTok{"}\CharTok{\textbackslash{}"}\StringTok{"}\NormalTok{,}\DataTypeTok{header=}\NormalTok{T)}
+\NormalTok{ventas10<-}\KeywordTok{read.table}\NormalTok{(}\StringTok{"sales_10_Oct"}\NormalTok{,}\DataTypeTok{nrows =} \OperatorTok{-}\DecValTok{1}\NormalTok{,}\DataTypeTok{sep=}\StringTok{"|"}\NormalTok{,}\DataTypeTok{quote=}\StringTok{"}\CharTok{\textbackslash{}"}\StringTok{"}\NormalTok{,}\DataTypeTok{header=}\NormalTok{T)}
+\NormalTok{ventas11<-}\KeywordTok{read.table}\NormalTok{(}\StringTok{"sales_11_Nov"}\NormalTok{,}\DataTypeTok{nrows =} \OperatorTok{-}\DecValTok{1}\NormalTok{,}\DataTypeTok{sep=}\StringTok{"|"}\NormalTok{,}\DataTypeTok{quote=}\StringTok{"}\CharTok{\textbackslash{}"}\StringTok{"}\NormalTok{,}\DataTypeTok{header=}\NormalTok{T)}
+\NormalTok{ventas12<-}\KeywordTok{read.table}\NormalTok{(}\StringTok{"sales_12_Dec"}\NormalTok{,}\DataTypeTok{nrows =} \OperatorTok{-}\DecValTok{1}\NormalTok{,}\DataTypeTok{sep=}\StringTok{"|"}\NormalTok{,}\DataTypeTok{quote=}\StringTok{"}\CharTok{\textbackslash{}"}\StringTok{"}\NormalTok{,}\DataTypeTok{header=}\NormalTok{T)}
+\NormalTok{ventas<-}\KeywordTok{rbind}\NormalTok{(ventas01,ventas02,ventas03,ventas04,ventas05,ventas06,ventas07,}
+\NormalTok{              ventas08,ventas09,ventas10,ventas11,}
+\NormalTok{              ventas12)}
+\end{Highlighting}
+\end{Shaded}
+
+\section{Transformación de datos}\label{transformacion-de-datos}
+
+Para usar la librería de R llamada ``arules'' que hace uso del algoritmo
+apriori para detección de patrones frecuentes se deben de transformar
+los datos a una estructura llave - valor y después guardarlos en un csv
+y leerlos con la función read.transactions
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{aux<-ventas[,}\KeywordTok{c}\NormalTok{(}\StringTok{"time_id"}\NormalTok{,}\StringTok{"customer_id"}\NormalTok{,}\StringTok{"product_subcategory"}\NormalTok{)]}
+\NormalTok{aux}\OperatorTok{$}\NormalTok{llave<-}\KeywordTok{paste0}\NormalTok{(aux}\OperatorTok{$}\NormalTok{time_id,}\StringTok{"-"}\NormalTok{,aux}\OperatorTok{$}\NormalTok{customer_id)}
+\NormalTok{aux}\OperatorTok{$}\NormalTok{time_id<-}\OtherTok{NULL}
+\NormalTok{aux}\OperatorTok{$}\NormalTok{customer_id<-}\OtherTok{NULL}
+\NormalTok{aux<-aux[}\OperatorTok{!}\KeywordTok{duplicated}\NormalTok{(aux),]}
+\KeywordTok{write.table}\NormalTok{(aux[,}\KeywordTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{,}\DecValTok{1}\NormalTok{)],}\StringTok{"transacciones.csv"}\NormalTok{,}\DataTypeTok{quote=}\NormalTok{F,}\DataTypeTok{row.names=}\NormalTok{F,}\DataTypeTok{sep=}\StringTok{","}\NormalTok{)}
+
+\NormalTok{transacciones<-}\KeywordTok{read.transactions}\NormalTok{(}\StringTok{"transacciones.csv"}\NormalTok{,}\DataTypeTok{format=}\StringTok{"single"}\NormalTok{,}\DataTypeTok{sep=}\StringTok{","}\NormalTok{,}\DataTypeTok{cols =}
+                                   \KeywordTok{c}\NormalTok{(}\StringTok{"llave"}\NormalTok{,}\StringTok{"product_subcategory"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\section{Análisis y resultados}\label{analisis-y-resultados}
+
+Se usaron dichos datos para evaluar el algoritmo apriori y obtener los
+patrones más frecuentes. Se utilizó un soporte de 0.02 ya que se tienen
+suficientes datos de transacciones y ``pocas'' categorías.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{itemsets <-}\StringTok{ }\KeywordTok{apriori}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ transacciones,}
+                    \DataTypeTok{parameter =} \KeywordTok{list}\NormalTok{(}\DataTypeTok{support =} \FloatTok{0.02}\NormalTok{,}
+                                     \DataTypeTok{minlen =} \DecValTok{2}\NormalTok{,}
+                                     \DataTypeTok{maxlen =} \DecValTok{20}\NormalTok{,}
+                                     \DataTypeTok{target =} \StringTok{"frequent itemset"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Apriori
+## 
+## Parameter specification:
+##  confidence minval smax arem  aval originalSupport maxtime support minlen
+##          NA    0.1    1 none FALSE            TRUE       5    0.02      2
+##  maxlen            target   ext
+##      20 frequent itemsets FALSE
+## 
+## Algorithmic control:
+##  filter tree heap memopt load sort verbose
+##     0.1 TRUE TRUE  FALSE TRUE    2    TRUE
+## 
+## Absolute minimum support count: 410 
+## 
+## set item appearances ...[0 item(s)] done [0.00s].
+## set transactions ...[102 item(s), 20522 transaction(s)] done [0.00s].
+## sorting and recoding items ... [67 item(s)] done [0.00s].
+## creating transaction tree ... done [0.00s].
+## checking subsets of size 1 2 3 done [0.00s].
+## writing ... [10 set(s)] done [0.00s].
+## creating S4 object  ... done [0.00s].
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{order_itemsets <-}\StringTok{ }\KeywordTok{sort}\NormalTok{(itemsets, }\DataTypeTok{by =} \StringTok{"support"}\NormalTok{, }\DataTypeTok{decreasing =} \OtherTok{TRUE}\NormalTok{)}
+\KeywordTok{inspect}\NormalTok{(order_itemsets)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##      items                                support    count
+## [1]  {Fresh Fruit,Fresh Vegetables}       0.04804600 986  
+## [2]  {Fresh Vegetables,Soup}              0.03284280 674  
+## [3]  {Dried Fruit,Fresh Vegetables}       0.03250171 667  
+## [4]  {Cheese,Fresh Vegetables}            0.03094240 635  
+## [5]  {Cookies,Fresh Vegetables}           0.02723906 559  
+## [6]  {Fresh Vegetables,Wine}              0.02173277 446  
+## [7]  {Canned Vegetables,Fresh Vegetables} 0.02163532 444  
+## [8]  {Fresh Vegetables,Paper Wipes}       0.02109931 433  
+## [9]  {Cheese,Fresh Fruit}                 0.02070948 425  
+## [10] {Fresh Fruit,Soup}                   0.02051457 421
+\end{verbatim}
+
+\section{Visualización}\label{visualizacion}
+
+Se presenta la visualización de dichos patrones por medio de una gráfica
+de barras:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{as}\NormalTok{(order_itemsets, }\DataTypeTok{Class =} \StringTok{"data.frame"}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{ggplot}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \KeywordTok{reorder}\NormalTok{(items, support), }\DataTypeTok{y =}\NormalTok{ support)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_col}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{coord_flip}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =} \StringTok{"Itemsets más frecuentes"}\NormalTok{, }\DataTypeTok{x =} \StringTok{"itemsets"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme_bw}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{patrones_freq_files/figure-latex/unnamed-chunk-4-1.pdf}
+
+
+\end{document}
