@@ -1,0 +1,4 @@
+Utilizando la herramienta y los datos trabajados en clase encontrar:
+1.- La moduladidad de cada libro (guardar la grafica)
+2.- El pagerank de cada libro (guardar la grafica)
+3.- La representación del grafo visualmente (pdf)
