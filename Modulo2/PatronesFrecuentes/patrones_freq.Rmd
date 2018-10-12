@@ -130,3 +130,39 @@ as(order_itemsets, Class = "data.frame") %>%
   theme_bw()
 
 ```
+
+# Reglas 
+
+Para las reglas los resultados quedan:
+
+```{r}
+
+rules <- apriori(data = transacciones,
+                    parameter = list(support = 0.02,
+                                     minlen = 2,
+                                     maxlen = 20,
+                                     confidence = .2,
+                                     target = "rules"))
+
+order_rules <- sort(rules, by = "support", decreasing = TRUE)
+inspect(order_rules)
+
+
+```
+
+Cabe destacar que la confianza es muy baja (20%) y que en el presente caso sólo podríamos establecer qué secciones deberían de estar cerca de la sección de vegetales frescos.
+
+# Visualización
+
+Se presenta la visualización de dichas reglas por medio de una gráfica de barras:
+
+```{r}
+as(order_rules, Class = "data.frame") %>%
+  ggplot(aes(x = reorder(rules, confidence), y = confidence)) +
+  geom_col() +
+  coord_flip() +
+  labs(title = "Reglas derivadas", x = "reglas") +
+  theme_bw()
+
+```
+

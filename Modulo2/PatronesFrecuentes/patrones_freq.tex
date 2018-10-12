@@ -272,9 +272,9 @@ suficientes datos de transacciones y ``pocas'' categorías.
 ## Absolute minimum support count: 410 
 ## 
 ## set item appearances ...[0 item(s)] done [0.00s].
-## set transactions ...[102 item(s), 20522 transaction(s)] done [0.00s].
+## set transactions ...[102 item(s), 20522 transaction(s)] done [0.01s].
 ## sorting and recoding items ... [67 item(s)] done [0.00s].
-## creating transaction tree ... done [0.00s].
+## creating transaction tree ... done [0.01s].
 ## checking subsets of size 1 2 3 done [0.00s].
 ## writing ... [10 set(s)] done [0.00s].
 ## creating S4 object  ... done [0.00s].
@@ -318,6 +318,95 @@ de barras:
 \end{Shaded}
 
 \includegraphics{patrones_freq_files/figure-latex/unnamed-chunk-4-1.pdf}
+
+\section{Reglas}\label{reglas}
+
+Para las reglas los resultados quedan:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{rules <-}\StringTok{ }\KeywordTok{apriori}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ transacciones,}
+                    \DataTypeTok{parameter =} \KeywordTok{list}\NormalTok{(}\DataTypeTok{support =} \FloatTok{0.02}\NormalTok{,}
+                                     \DataTypeTok{minlen =} \DecValTok{2}\NormalTok{,}
+                                     \DataTypeTok{maxlen =} \DecValTok{20}\NormalTok{,}
+                                     \DataTypeTok{confidence =}\NormalTok{ .}\DecValTok{2}\NormalTok{,}
+                                     \DataTypeTok{target =} \StringTok{"rules"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Apriori
+## 
+## Parameter specification:
+##  confidence minval smax arem  aval originalSupport maxtime support minlen
+##         0.2    0.1    1 none FALSE            TRUE       5    0.02      2
+##  maxlen target   ext
+##      20  rules FALSE
+## 
+## Algorithmic control:
+##  filter tree heap memopt load sort verbose
+##     0.1 TRUE TRUE  FALSE TRUE    2    TRUE
+## 
+## Absolute minimum support count: 410 
+## 
+## set item appearances ...[0 item(s)] done [0.00s].
+## set transactions ...[102 item(s), 20522 transaction(s)] done [0.01s].
+## sorting and recoding items ... [67 item(s)] done [0.00s].
+## creating transaction tree ... done [0.01s].
+## checking subsets of size 1 2 3 done [0.00s].
+## writing ... [8 rule(s)] done [0.00s].
+## creating S4 object  ... done [0.00s].
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{order_rules <-}\StringTok{ }\KeywordTok{sort}\NormalTok{(rules, }\DataTypeTok{by =} \StringTok{"support"}\NormalTok{, }\DataTypeTok{decreasing =} \OtherTok{TRUE}\NormalTok{)}
+\KeywordTok{inspect}\NormalTok{(order_rules)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##     lhs                    rhs                support    confidence
+## [1] {Fresh Fruit}       => {Fresh Vegetables} 0.04804600 0.2831706 
+## [2] {Soup}              => {Fresh Vegetables} 0.03284280 0.2756646 
+## [3] {Dried Fruit}       => {Fresh Vegetables} 0.03250171 0.2908853 
+## [4] {Cheese}            => {Fresh Vegetables} 0.03094240 0.2639235 
+## [5] {Cookies}           => {Fresh Vegetables} 0.02723906 0.2610929 
+## [6] {Wine}              => {Fresh Vegetables} 0.02173277 0.2756489 
+## [7] {Canned Vegetables} => {Fresh Vegetables} 0.02163532 0.2759478 
+## [8] {Paper Wipes}       => {Fresh Vegetables} 0.02109931 0.2684439 
+##     lift      count
+## [1] 1.0145298 986  
+## [2] 0.9876378 674  
+## [3] 1.0421697 667  
+## [4] 0.9455724 635  
+## [5] 0.9354311 559  
+## [6] 0.9875817 446  
+## [7] 0.9886523 444  
+## [8] 0.9617677 433
+\end{verbatim}
+
+Cabe destacar que la confianza es muy baja (20\%) y que en el presente
+caso sólo podríamos establecer qué secciones deberían de estar cerca de
+la sección de vegetales frescos.
+
+\section{Visualización}\label{visualizacion-1}
+
+Se presenta la visualización de dichas reglas por medio de una gráfica
+de barras:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{as}\NormalTok{(order_rules, }\DataTypeTok{Class =} \StringTok{"data.frame"}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{ggplot}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \KeywordTok{reorder}\NormalTok{(rules, confidence), }\DataTypeTok{y =}\NormalTok{ confidence)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_col}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{coord_flip}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =} \StringTok{"Reglas derivadas"}\NormalTok{, }\DataTypeTok{x =} \StringTok{"reglas"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme_bw}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{patrones_freq_files/figure-latex/unnamed-chunk-6-1.pdf}
 
 
 \end{document}

@@ -51,3 +51,19 @@ as(order_itemsets, Class = "data.frame") %>%
   coord_flip() +
   labs(title = "Itemsets más frecuentes", x = "itemsets") +
   theme_bw()
+
+rules <- apriori(data = transacciones,
+                    parameter = list(support = 0.02,
+                                     minlen = 2,
+                                     maxlen = 20,
+                                     confidence = .2,
+                                     target = "rules"))
+
+order_rules <- sort(rules, by = "support", decreasing = TRUE)
+inspect(order_rules)
+as(order_rules, Class = "data.frame") %>%
+  ggplot(aes(x = reorder(rules, confidence), y = confidence)) +
+  geom_col() +
+  coord_flip() +
+  labs(title = "Reglas derivadas", x = "reglas") +
+  theme_bw()
