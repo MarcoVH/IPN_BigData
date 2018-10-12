@@ -385,5 +385,35 @@ Para la distancia máxima se tiene:
 En donde para k=1 se sugiere invertir en todos los casos y para k=3 y 5
 podría variar de acuerdo a un parámetro de ``confianza''.
 
+Por lo anterior, para finalizar sólo falta establecer la función que
+haga la traducción final, para el presente caso se toma como referencia
+el threshold de 50\% por lo que en todos los casos se sugiere invertir:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{eval2}\OperatorTok{$}\NormalTok{Invertir<-}\OtherTok{NULL}
+\NormalTok{aux<-matriz_inversion_e}
+\NormalTok{aux<-}\KeywordTok{ifelse}\NormalTok{(aux}\OperatorTok{>}\NormalTok{.}\DecValTok{5}\NormalTok{,}\StringTok{"Si"}\NormalTok{,}\StringTok{"No"}\NormalTok{)}
+\NormalTok{eval2<-}\KeywordTok{cbind}\NormalTok{(eval2, aux)}
+\NormalTok{aux<-matriz_inversion_max}
+\NormalTok{aux<-}\KeywordTok{ifelse}\NormalTok{(aux}\OperatorTok{>}\NormalTok{.}\DecValTok{5}\NormalTok{,}\StringTok{"Si"}\NormalTok{,}\StringTok{"No"}\NormalTok{)}
+\NormalTok{eval2<-}\KeywordTok{cbind}\NormalTok{(eval2, aux)}
+\NormalTok{eval2}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##       Precio Metros.Cuadrados Baños Cuartos Estacionamiento Mantenimiento
+## 1 0.04878049           0.1875     0       0             0.5     0.2105263
+## 2 0.21951220           0.2500     0       0             0.5     0.4736842
+## 3 0.34146341           0.3375     0       1             0.5     0.6842105
+## 4 0.73170732           0.8125     1       1             0.5     0.8947368
+##   k=1 k=3 k=5 k=1 k=3 k=5
+## 1  Si  Si  Si  Si  Si  Si
+## 2  Si  Si  Si  Si  Si  Si
+## 3  Si  Si  Si  Si  Si  Si
+## 4  Si  Si  Si  Si  Si  Si
+\end{verbatim}
+
 
 \end{document}
